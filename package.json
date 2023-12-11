@@ -1,5 +1,5 @@
 {
-    "name": "apl-back-fiap",
+    "name": "apl-pedido-back",
     "version": "1.0.0",
     "description": "Repositório da aplicação back-end.",
     "scripts": {
@@ -22,15 +22,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/FIAP-25/apl-back-fiap.git"
+        "url": "git+https://github.com/FIAP-25/apl-pedido-back.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/FIAP-25/apl-back-fiap/issues"
+        "url": "https://github.com/FIAP-25/apl-pedido-back/issues"
     },
-    "homepage": "https://github.com/FIAP-25/apl-back-fiap#readme",
+    "homepage": "https://github.com/FIAP-25/apl-pedido-back#readme",
     "dependencies": {
         "@automapper/classes": "^8.7.7",
         "@automapper/core": "^8.7.7",

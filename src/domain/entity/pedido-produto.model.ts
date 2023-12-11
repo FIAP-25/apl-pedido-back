@@ -1,6 +1,5 @@
 import { AutoMap } from '@automapper/classes';
 import { Pedido } from './pedido.model';
-import { Produto } from './produto.model';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PedidoProduto {
@@ -15,6 +14,6 @@ export class PedidoProduto {
     @AutoMap()
     pedido?: Pedido;
 
-    @AutoMap()
-    produto: Produto;
+    // @AutoMap()
+    // produto: Produto;
 }

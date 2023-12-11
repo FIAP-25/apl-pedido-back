@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { ClienteEntity } from './cliente.entity';
+
 import { PedidoProdutoEntity } from './pedido-produto.entity';
 import { PedidoStatusEntity } from './pedido-status.entity';
 
@@ -28,8 +28,8 @@ export class PedidoEntity {
     })
     status: PedidoStatusEntity;
 
-    @ManyToOne(() => ClienteEntity, (cliente) => cliente.pedidos)
-    cliente: ClienteEntity;
+    // @ManyToOne(() => ClienteEntity, (cliente) => cliente.pedidos)
+    // cliente: ClienteEntity;
 
     @OneToMany(() => PedidoProdutoEntity, (pedidoProduto) => pedidoProduto.pedido)
     pedidoProdutos: PedidoProdutoEntity[];
