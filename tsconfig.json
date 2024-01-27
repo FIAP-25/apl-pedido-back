@@ -9,11 +9,11 @@
         "resolveJsonModule": true,
         "allowJs": true,
         "sourceMap": true,
-        "rootDirs": ["src", "tests"],
-        "baseUrl": "src",
+        "rootDirs": ["src", "test"],
+        "baseUrl": ".",
         "paths": {
-            "@/tests/*": ["../tests/*"],
-            "@/*": ["*"]
+            "@/*": ["src/*"],
+            "@/test/*": ["../test/*"]
         },
         "strict": true,
         "emitDecoratorMetadata": true,
@@ -24,6 +24,6 @@
         "strictPropertyInitialization": false,
         "noImplicitAny": false
     },
-    "include": ["src", "tests"],
+    "include": ["src", "test"],
     "exclude": []
 }

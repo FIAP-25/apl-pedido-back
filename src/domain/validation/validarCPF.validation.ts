@@ -3,9 +3,11 @@ export const validarCPF = (cpf: string): boolean => {
     let resto;
     soma = 0;
 
-    if (cpf === '00000000000') {
+    // Verifica se o CPF é composto por um único número repetido
+    if (/^(\d)\1+$/.test(cpf)) {
         return false;
     }
+
     for (let i = 1; i <= 9; i++) {
         soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
