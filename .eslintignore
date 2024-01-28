@@ -7,3 +7,4 @@ node_modules
 public
 swagger.js
 allure-results
+.DS_Store
