@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PedidoEntity } from './pedido.entity';
+import { ProdutoEntity } from './produto.entity';
 
 @Entity('pedido_produto')
 export class PedidoProdutoEntity {
@@ -12,6 +13,6 @@ export class PedidoProdutoEntity {
     @ManyToOne(() => PedidoEntity, (pedido) => pedido.pedidoProdutos)
     pedido: PedidoEntity;
 
-    // @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidoProdutos)
-    // produto: ProdutoEntity;
+    @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidoProdutos)
+    produto: ProdutoEntity;
 }

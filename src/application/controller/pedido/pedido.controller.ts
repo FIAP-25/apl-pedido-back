@@ -11,7 +11,7 @@ import { Response } from 'express';
 @ApiTags('Pedidos')
 @Controller('api/pedidos')
 export class PedidoController {
-    constructor(private pedidoUseCase: IPedidoUseCase) { }
+    constructor(private pedidoUseCase: IPedidoUseCase) {}
 
     @Post()
     @ApiOperation({ summary: 'Adiciona um pedido' })

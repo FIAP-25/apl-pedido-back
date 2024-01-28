@@ -1,7 +1,9 @@
 import { mapper } from '@/application/mapper/base.mapper';
+import { IClienteRepository } from '@/domain/contract/repository/cliente.interface';
 import { IPedidoProdutoRepository } from '@/domain/contract/repository/pedido-produto.interface';
 import { IPedidoStatusRepository } from '@/domain/contract/repository/pedido-status.interface';
 import { IPedidoRepository } from '@/domain/contract/repository/pedido.interface';
+import { IProdutoRepository } from '@/domain/contract/repository/produto.interface';
 import { IPedidoUseCase } from '@/domain/contract/usecase/pedido.interface';
 import { PedidoProduto } from '@/domain/entity/pedido-produto.model';
 import { Pedido } from '@/domain/entity/pedido.model';
@@ -14,7 +16,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PedidoUseCase implements IPedidoUseCase {
-    constructor(private pedidoRepository: IPedidoRepository, private pedidoStatusRepository: IPedidoStatusRepository, private pedidoProdutoRepository: IPedidoProdutoRepository) { }
+    constructor(private clienteRepository: IClienteRepository, private pedidoRepository: IPedidoRepository, private pedidoStatusRepository: IPedidoStatusRepository, private pedidoProdutoRepository: IPedidoProdutoRepository, private produtoRepository: IProdutoRepository) {}
 
     async adicionarPedido(input: AdicionarPedidoInput): Promise<AdicionarPedidoOutput> {
         const pedido: Pedido = mapper.map(input, AdicionarPedidoInput, Pedido);
@@ -34,15 +36,15 @@ export class PedidoUseCase implements IPedidoUseCase {
             throw new ErroNegocio('pedido-produto-duplicado');
         }
 
-        // if (input.clienteCPF) {
-        //     const clientePedido = await this.clienteRepository.findByCPF(input.clienteCPF);
+        if (input.clienteCPF) {
+            const clientePedido = await this.clienteRepository.findByCPF(input.clienteCPF);
 
-        //     if (!clientePedido) {
-        //         throw new ErroNegocio('cliente-nao-cadastrado');
-        //     }
+            if (!clientePedido) {
+                throw new ErroNegocio('cliente-nao-cadastrado');
+            }
 
-        //     pedido.cliente = clientePedido;
-        // }
+            pedido.cliente = clientePedido;
+        }
 
         const pedidoStatus = await this.pedidoStatusRepository.findByTag('pedido_recebido');
 
@@ -50,48 +52,48 @@ export class PedidoUseCase implements IPedidoUseCase {
             pedido.status = pedidoStatus;
         }
 
-        // const produtos = await this.produtoRepository.find();
+        const produtos = await this.produtoRepository.find();
 
         input.pedidoProdutos.forEach((produto) => {
-            // const produtoEncontrado = produtos.find((produtoEncontrado) => produtoEncontrado.id === produto.id);
+            const produtoEncontrado = produtos.find((produtoEncontrado) => produtoEncontrado.id === produto.id);
 
-            // if (!produtoEncontrado) {
-            //     throw new ErroNegocio('pedido-produto-nao-existe');
-            // }
+            if (!produtoEncontrado) {
+                throw new ErroNegocio('pedido-produto-nao-existe');
+            }
         });
 
         pedido.valorTotal = input.pedidoProdutos
             .map((pedidoProduto) => {
-                // const produto = produtos.find((produto) => produto.id === pedidoProduto.id);
-                // if (produto) {
-                //     return produto?.preco * pedidoProduto.quantidade;
-                // }
+                const produto = produtos.find((produto) => produto.id === pedidoProduto.id);
+                if (produto) {
+                    return produto?.preco * pedidoProduto.quantidade;
+                }
                 return 0;
             })
             .reduce((soma, preco) => soma + preco);
 
         const pedidoAdicionado = await this.pedidoRepository.save(pedido);
 
-        // const pedidoProduto = input.pedidoProdutos.map((pedidoProduto) => {
-        //     const produto = produtos.find((produto) => produto.id === pedidoProduto.id);
+        const pedidoProduto = input.pedidoProdutos.map((pedidoProduto) => {
+            const produto = produtos.find((produto) => produto.id === pedidoProduto.id);
 
-        //     return {
-        //         pedido: { ...pedidoAdicionado },
-        //         produto: produto,
-        //         quantidade: pedidoProduto.quantidade
-        //     };
-        // });
+            return {
+                pedido: { ...pedidoAdicionado },
+                produto: produto,
+                quantidade: pedidoProduto.quantidade
+            };
+        });
 
-        // if (pedidoProduto) {
-        //     pedido.pedidoProdutos = pedidoProduto as PedidoProduto[];
-        // }
+        if (pedidoProduto) {
+            pedido.pedidoProdutos = pedidoProduto as PedidoProduto[];
+        }
 
         const pedidoProdutoAdicionado = await this.pedidoProdutoRepository.saveMany(pedido.pedidoProdutos);
 
         pedidoAdicionado.pedidoProdutos = pedidoProdutoAdicionado.map((pedidoProduto) => {
             return {
                 id: pedidoProduto.id,
-                // produto: pedidoProduto.produto,
+                produto: pedidoProduto.produto,
                 quantidade: pedidoProduto.quantidade
             };
         });
