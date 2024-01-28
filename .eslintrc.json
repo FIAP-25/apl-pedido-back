@@ -33,6 +33,12 @@
                 "no-console": "off",
                 "object-shorthand": "off"
             }
-        }
+        },
+        {
+            "files": ["tests/**/*"],
+            "env": {
+              "jest": true
+            }
+          }
     ]
 }
