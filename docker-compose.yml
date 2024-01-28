@@ -1,8 +1,9 @@
 version: '3'
 
 networks:
-    my-network:
-        driver: bridge
+    mynetwork:
+        name: mynetwork
+        external: true
 
 services:
     mysql:
@@ -19,13 +20,17 @@ services:
             test: mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
             timeout: 2s
             retries: 10
+        networks:
+            - mynetwork
 
-    node:
+    node_pedido:
         build:
             context: .
             dockerfile: Dockerfile
         restart: always
-        container_name: node
+        container_name: node_pedido
+        networks:
+            - mynetwork
         ports:
             - '3000:3000'
         depends_on:

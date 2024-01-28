@@ -1,5 +1,6 @@
 import { PedidoController } from '@/application/controller/pedido/pedido.controller';
 import { IPedidoUseCase } from '@/domain/contract/usecase/pedido.interface';
+import { Cliente } from '@/domain/entity/cliente.model';
 import { PedidoStatus } from '@/domain/entity/pedido-status.model';
 import { Pedido } from '@/domain/entity/pedido.model';
 import { AdicionarPedidoInput, AdicionarPedidoOutput } from '@/infrastructure/dto/pedido/adicionarPedido.dto';
@@ -41,7 +42,8 @@ describe('PedidoController', () => {
             dataCadastro: new Date(),
             status: new PedidoStatus(),
             dataAtualizacao: new Date(),
-            pagamentoStatus: 'Pago'
+            pagamentoStatus: 'Pago',
+            cliente: new Cliente()
         };
         mockPedidoUseCase.adicionarPedido.mockResolvedValue(expectedOutput);
 
@@ -83,7 +85,8 @@ describe('PedidoController', () => {
             pedidoProdutos: [],
             dataCadastro: new Date(),
             dataAtualizacao: new Date(),
-            pagamentoStatus: 'Pago'
+            pagamentoStatus: 'Pago',
+            cliente: new Cliente()
         };
         mockPedidoUseCase.atualizarPedidoStatusPorId.mockResolvedValue(expectedOutput);
 
@@ -115,7 +118,8 @@ describe('PedidoController', () => {
             pedidoProdutos: [],
             dataCadastro: new Date(),
             dataAtualizacao: new Date(),
-            pagamentoStatus: 'Pago'
+            pagamentoStatus: 'Pago',
+            cliente: new Cliente()
         };
         mockPedidoUseCase.webhookConfirmacaoPagamento.mockResolvedValue(expectedOutput);
 
