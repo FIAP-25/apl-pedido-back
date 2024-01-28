@@ -1,6 +1,6 @@
-# apl-nest-fiap
+# apl-pedido-back
 
-Repositório da aplicação back-end.
+Repositório do microserviço de pedido.
 
 ## Rodando Localmente
 
@@ -9,7 +9,7 @@ Para rodar a aplicação localmente siga as etapas abaixo:
 Clone o projeto
 
 ```bash
-  git clone https://github.com/FIAP-25/apl-nest-fiap.git
+  git clone https://github.com/FIAP-25/apl-pedido-back.git
 ```
 
 Instale a versão do Node:
