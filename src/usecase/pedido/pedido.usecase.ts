@@ -1,4 +1,5 @@
 import { mapper } from '@/application/mapper/base.mapper';
+import { IAxiosClient } from '@/domain/contract/client/axios.interface';
 import { IClienteRepository } from '@/domain/contract/repository/cliente.interface';
 import { IPedidoProdutoRepository } from '@/domain/contract/repository/pedido-produto.interface';
 import { IPedidoStatusRepository } from '@/domain/contract/repository/pedido-status.interface';
@@ -16,7 +17,14 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PedidoUseCase implements IPedidoUseCase {
-    constructor(private clienteRepository: IClienteRepository, private pedidoRepository: IPedidoRepository, private pedidoStatusRepository: IPedidoStatusRepository, private pedidoProdutoRepository: IPedidoProdutoRepository, private produtoRepository: IProdutoRepository) {}
+    constructor(
+        private clienteRepository: IClienteRepository,
+        private pedidoRepository: IPedidoRepository,
+        private pedidoStatusRepository: IPedidoStatusRepository,
+        private pedidoProdutoRepository: IPedidoProdutoRepository,
+        private produtoRepository: IProdutoRepository,
+        private axiosClient: IAxiosClient
+    ) {}
 
     async adicionarPedido(input: AdicionarPedidoInput): Promise<AdicionarPedidoOutput> {
         const pedido: Pedido = mapper.map(input, AdicionarPedidoInput, Pedido);
@@ -98,6 +106,8 @@ export class PedidoUseCase implements IPedidoUseCase {
             };
         });
 
+        await this.enviarPagamento(pedidoAdicionado.id);
+
         return mapper.map(pedidoAdicionado, Pedido, AdicionarPedidoOutput);
     }
 
@@ -149,6 +159,8 @@ export class PedidoUseCase implements IPedidoUseCase {
         pedidoEncontrado.pagamentoStatus = body.aprovado ? 'pedido_aprovado' : 'pedido_nao_aprovado';
         const pedidoAtualizado = await this.pedidoRepository.save(pedidoEncontrado);
 
+        await this.enviarProducao(pedidoAtualizado.id);
+
         return pedidoAtualizado;
     }
 
@@ -169,5 +181,27 @@ export class PedidoUseCase implements IPedidoUseCase {
         });
 
         return listaOrdenada;
+    }
+
+    async enviarPagamento(id: string): Promise<void> {
+        await this.axiosClient
+            .executarChamada('pagamento', 'post', `pagamentos/cadastrar/${id}`, {})
+            .then((resultado) => {
+                console.log('resultado: ', resultado);
+            })
+            .catch((erro) => {
+                console.log('erro: ', erro);
+            });
+    }
+
+    async enviarProducao(id: string): Promise<void> {
+        await this.axiosClient
+            .executarChamada('producao', 'post', `producao/cadastrar`, { pedidoId: id })
+            .then((resultado) => {
+                console.log('resultado: ', resultado);
+            })
+            .catch((erro) => {
+                console.log('erro: ', erro);
+            });
     }
 }

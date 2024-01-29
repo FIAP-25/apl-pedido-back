@@ -13,9 +13,6 @@ export class Cliente {
     @AutoMap()
     nomeCompleto: string;
 
-    @AutoMap()
-    token: string;
-
     validarClienteAdicionar(): boolean {
         if (!validarCPF(this.cpf)) throw new ErroNegocio('cliente-cpf-invalido');
 
