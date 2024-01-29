@@ -132,7 +132,6 @@ dist
 
 package-lock.json
 
-.env*
 .flaskenv*
 !.env.project
 !.env.vault
