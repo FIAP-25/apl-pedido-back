@@ -22,7 +22,9 @@ describe('PedidoController', () => {
             webhookConfirmacaoPagamento: jest.fn(),
             obterFilaPedidos: jest.fn(),
             obterPedidoPorId: jest.fn(),
-            obterStatusPedidosPorId: jest.fn()
+            obterStatusPedidosPorId: jest.fn(),
+            enviarPagamento: jest.fn(),
+            enviarProducao: jest.fn()
         };
 
         const module: TestingModule = await Test.createTestingModule({

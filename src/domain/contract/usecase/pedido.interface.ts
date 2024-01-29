@@ -13,4 +13,6 @@ export abstract class IPedidoUseCase {
     abstract obterStatusPedidosPorId(id: string): Promise<string>;
     abstract webhookConfirmacaoPagamento(body: webhookPedido): Promise<Pedido>;
     abstract obterFilaPedidos(): Promise<any>;
+    abstract enviarPagamento(id: string): Promise<void>;
+    abstract enviarProducao(id: string): Promise<void>;
 }

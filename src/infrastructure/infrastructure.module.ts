@@ -19,6 +19,8 @@ import { IPedidoProdutoRepository } from '@/domain/contract/repository/pedido-pr
 import { IPedidoStatusRepository } from '@/domain/contract/repository/pedido-status.interface';
 import { IPedidoRepository } from '@/domain/contract/repository/pedido.interface';
 import { IProdutoRepository } from '@/domain/contract/repository/produto.interface';
+import { IAxiosClient } from '@/domain/contract/client/axios.interface';
+import { AxiosClient } from './client/axios.client';
 @Module({
     imports: [TypeOrmModule.forFeature([CategoriaEntity, ClienteEntity, PedidoEntity, PedidoProdutoEntity, PedidoStatusEntity, ProdutoEntity, PedidoEntity, PedidoStatusEntity]), ConnectionModule],
     providers: [
@@ -27,9 +29,9 @@ import { IProdutoRepository } from '@/domain/contract/repository/produto.interfa
         { provide: IProdutoRepository, useClass: ProdutoRepository },
         { provide: IPedidoRepository, useClass: PedidoRepository },
         { provide: IPedidoStatusRepository, useClass: PedidoStatusRepository },
-        { provide: IPedidoProdutoRepository, useClass: PedidoProdutoRepository }
+        { provide: IPedidoProdutoRepository, useClass: PedidoProdutoRepository },
+        { provide: IAxiosClient, useClass: AxiosClient }
     ],
-    exports: [IClienteRepository, ICategoriaRepository, IProdutoRepository, IPedidoRepository, IPedidoStatusRepository, IPedidoProdutoRepository, ConnectionModule]
+    exports: [IClienteRepository, ICategoriaRepository, IProdutoRepository, IPedidoRepository, IPedidoStatusRepository, IPedidoProdutoRepository, IAxiosClient, ConnectionModule]
 })
-
 export default class InfrastructureModule {}
