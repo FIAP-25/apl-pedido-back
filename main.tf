@@ -12,7 +12,7 @@ provider "aws" {
 # ECR Repository
 ###################################################
 
-resource "aws_ecr_repository" "ecr_nest_fiap" {
+resource "aws_ecr_repository" "ecr_nest_fiap_pedido" {
   name                 = "apl-pedido-back"
   image_tag_mutability = "MUTABLE"
 

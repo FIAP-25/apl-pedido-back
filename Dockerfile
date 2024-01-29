@@ -9,7 +9,7 @@ ENV DATABASE_PORT 3306
 ENV DATABASE_USERNAME 'root' 
 ENV DATABASE_PASSWORD 'root' 
 ENV DATABASE_SCHEMA 'fiap'
-ENV URL_BASE_PAGAMENTO 'http://node_pagamento:6000/api/'
+ENV URL_BASE_PAGAMENTO 'http://node_pagamento:5001/api/'
 ENV URL_BASE_PRODUCAO 'http://node_producao:5000/api/'
 
 COPY package.json package-lock.json ./
