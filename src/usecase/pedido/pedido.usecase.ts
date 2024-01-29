@@ -78,7 +78,7 @@ export class PedidoUseCase implements IPedidoUseCase {
                 }
                 return 0;
             })
-            .reduce((soma, preco) => soma + preco);
+            .reduce((soma, preco) => soma + preco, 0);
 
         const pedidoAdicionado = await this.pedidoRepository.save(pedido);
 

@@ -4,7 +4,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class AdicionarClienteInput {
     @AutoMap()
     @ApiProperty({ required: true })
-    cpf: number;
+    cpf: string;
 
     @AutoMap()
     @ApiPropertyOptional()

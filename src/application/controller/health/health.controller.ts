@@ -4,7 +4,7 @@ import { Response } from 'express';
 
 @ApiTags('Health')
 @Controller('api/health')
-export class HeatlhController {
+export class HealthController {
     @Get()
     @ApiOperation({ summary: 'Obtém a saúde do sistema' })
     health(@Res() res: Response): any {
