@@ -79,10 +79,14 @@ export class ProdutoUseCase implements IProdutoUseCase {
     }
 
     async obterProdutosPorCategoria(id: string): Promise<ObterProdutoPorCategoriaOutput[]> {
+        const categoria = await this.categoriaRepository.findById(id);
+
+        if (!categoria) {
+            throw new ErroNegocio('produto-categoria-nao-existe');
+        }
+
         const produtos = await this.produtoRepository.findBy({
-            categoria: {
-                id: id
-            }
+            categoria: { id }
         });
 
         return mapper.mapArray(produtos, Produto, ObterProdutoPorCategoriaOutput);

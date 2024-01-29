@@ -53,7 +53,13 @@ describe('CategoriaUseCase', () => {
 
     it('deve remover uma categoria por id', async () => {
         const id = '123';
+        const categoriaMock = new Categoria();
+        categoriaMock.id = id;
+        mockCategoriaRepository.findById.mockResolvedValue(categoriaMock);
+
         await useCase.removerCategoriaPorId(id);
+
+        expect(mockCategoriaRepository.findById).toHaveBeenCalledWith(id);
         expect(mockCategoriaRepository.remove).toHaveBeenCalledWith(id);
     });
 
@@ -102,5 +108,31 @@ describe('CategoriaUseCase', () => {
         mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
 
         await expect(useCase.atualizarCategoriaPorId(id, { descricao: 'Nova Descrição' })).rejects.toThrow(ErroNegocio);
+    });
+    it('deve lançar erro ao tentar adicionar uma categoria com descrição vazia', async () => {
+        const input: AdicionarCategoriaInput = { descricao: '' };
+
+        await expect(useCase.adicionarCategoria(input)).rejects.toThrow(ErroNegocio);
+    });
+
+    it('deve lançar erro ao tentar remover uma categoria inexistente', async () => {
+        const idInexistente = 'id-inexistente';
+        mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
+
+        await expect(useCase.removerCategoriaPorId(idInexistente)).rejects.toThrow(ErroNegocio);
+    });
+
+    it('deve lançar erro ao tentar obter uma categoria inexistente por ID', async () => {
+        const idInexistente = 'id-inexistente';
+        mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
+
+        await expect(useCase.obterCategoriaPorId(idInexistente)).rejects.toThrow(ErroNegocio);
+    });
+
+    it('deve lidar com falhas do repositório ao adicionar uma categoria', async () => {
+        const input: AdicionarCategoriaInput = { descricao: 'Categoria Teste' };
+        mockCategoriaRepository.save.mockRejectedValue(new Error('Falha no repositório'));
+
+        await expect(useCase.adicionarCategoria(input)).rejects.toThrow(Error);
     });
 });

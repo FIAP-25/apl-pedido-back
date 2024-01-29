@@ -53,7 +53,7 @@ describe('PedidoUseCase', () => {
             find: jest.fn().mockResolvedValue([]),
             findById: jest.fn(),
             save: jest.fn(),
-            saveMany: jest.fn(),
+            saveMany: jest.fn().mockImplementation(async (pedidoProdutos) => pedidoProdutos),
             removeById: jest.fn().mockResolvedValue(undefined)
         } as jest.Mocked<IPedidoProdutoRepository>;
 

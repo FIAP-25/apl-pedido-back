@@ -2,6 +2,7 @@ import { ICategoriaRepository } from '@/domain/contract/repository/categoria.int
 import { IProdutoRepository } from '@/domain/contract/repository/produto.interface';
 import { Categoria } from '@/domain/entity/categoria.model';
 import { Produto } from '@/domain/entity/produto.model';
+import { ErroNegocio } from '@/domain/exception/erro.module';
 import { AdicionarProdutoInput } from '@/infrastructure/dto/produto/adicionarProduto.dto';
 import { AtualizarProdutoPorIdInput } from '@/infrastructure/dto/produto/atualizarProdutoPorId.dto';
 import { ProdutoUseCase } from '@/usecase/produto/produto.usecase';
@@ -11,10 +12,9 @@ jest.mock('@/application/mapper/base.mapper', () => ({
     mapper: {
         map: jest.fn().mockImplementation((source, _sourceIdentifier, destinationIdentifier) => {
             if (destinationIdentifier === Produto) {
-                // Cria uma instância de Produto com validarProduto mockado
                 const mockProduto = new Produto();
                 Object.assign(mockProduto, source);
-                mockProduto.categoria = new Categoria(); // Se necessário, ajuste conforme a fonte de dados de Categoria
+                mockProduto.categoria = new Categoria();
                 mockProduto.validarProduto = jest.fn().mockReturnValue(true);
                 return mockProduto;
             }
@@ -22,11 +22,10 @@ jest.mock('@/application/mapper/base.mapper', () => ({
         }),
         mapArray: jest.fn().mockImplementation((entities, _sourceIdentifier, destinationIdentifier) => {
             if (destinationIdentifier === Produto) {
-                // Mapeia cada entidade para um Produto mockado
                 return entities.map((entity) => {
                     const mockProduto = new Produto();
                     Object.assign(mockProduto, entity);
-                    mockProduto.categoria = new Categoria(); // Ajuste conforme a fonte de dados de Categoria
+                    mockProduto.categoria = new Categoria();
                     mockProduto.validarProduto = jest.fn().mockReturnValue(true);
                     return mockProduto;
                 });
@@ -36,7 +35,6 @@ jest.mock('@/application/mapper/base.mapper', () => ({
     }
 }));
 
-// Função de fábrica para criar um mock de Produto com a função validarProduto
 const criarProdutoMock = (id: string, nome: string, descricao: string, preco: number, categoriaId: string): Produto => {
     const produto = new Produto();
     produto.id = id;
@@ -126,7 +124,7 @@ describe('ProdutoUseCase', () => {
         produtoAtualizado.nome = input.nome;
         produtoAtualizado.descricao = input.descricao;
         produtoAtualizado.preco = input.preco;
-        produtoAtualizado.categoria = categoriaMock; // Atribua a categoria diretamente
+        produtoAtualizado.categoria = categoriaMock;
         produtoAtualizado.validarProduto = jest.fn().mockReturnValue(true);
 
         mockCategoriaRepository.findById.mockResolvedValue(categoriaMock);
@@ -135,14 +133,13 @@ describe('ProdutoUseCase', () => {
         const resultado = await produtoUseCase.atualizarProdutoPorId(input);
 
         expect(mockCategoriaRepository.findById).toHaveBeenCalledWith(input.categoriaId);
-        // Certifique-se de que o objeto passado para save seja igual ao esperado
         expect(mockProdutoRepository.save).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: input.id,
                 nome: input.nome,
                 descricao: input.descricao,
                 preco: input.preco,
-                categoria: categoriaMock // Verifique se a categoria é a mesma
+                categoria: categoriaMock
             })
         );
         expect(resultado).toEqual(produtoAtualizado);
@@ -173,13 +170,67 @@ describe('ProdutoUseCase', () => {
 
     it('deve obter produtos por categoria', async () => {
         const categoriaId = 'categoria-id';
-        const produtosMock = [criarProdutoMock('1', 'Produto 1', 'Descrição do Produto 1', 10, categoriaId), criarProdutoMock('2', 'Produto 2', 'Descrição do Produto 2', 20, categoriaId)];
+        const categoriaMock = new Categoria();
+        categoriaMock.id = categoriaId;
+        mockCategoriaRepository.findById.mockResolvedValue(categoriaMock);
 
+        const produtosMock = [criarProdutoMock('1', 'Produto 1', 'Descrição do Produto 1', 10, categoriaId), criarProdutoMock('2', 'Produto 2', 'Descrição do Produto 2', 20, categoriaId)];
         mockProdutoRepository.findBy.mockResolvedValue(produtosMock);
 
         const resultado = await produtoUseCase.obterProdutosPorCategoria(categoriaId);
 
+        expect(mockCategoriaRepository.findById).toHaveBeenCalledWith(categoriaId);
         expect(mockProdutoRepository.findBy).toHaveBeenCalledWith({ categoria: { id: categoriaId } });
         expect(resultado).toEqual(produtosMock);
+    });
+
+    it('deve lançar erro ao tentar adicionar um produto com categoria inexistente', async () => {
+        const input: AdicionarProdutoInput = {
+            nome: 'Produto Teste',
+            descricao: 'Descrição do Produto Teste',
+            preco: 10,
+            categoriaId: 'categoria-inexistente'
+        };
+
+        mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
+
+        await expect(produtoUseCase.adicionarProduto(input)).rejects.toThrow(new ErroNegocio('produto-categoria-nao-existe'));
+    });
+
+    it('deve lançar erro ao tentar atualizar um produto com categoria inexistente', async () => {
+        const input: AtualizarProdutoPorIdInput = {
+            id: 'produto-id',
+            nome: 'Produto Atualizado',
+            descricao: 'Descrição Atualizada',
+            preco: 15,
+            categoriaId: 'categoria-inexistente'
+        };
+
+        mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
+
+        await expect(produtoUseCase.atualizarProdutoPorId(input)).rejects.toThrow(new ErroNegocio('produto-categoria-nao-existe'));
+    });
+
+    it('deve lançar erro ao tentar obter um produto por ID inexistente', async () => {
+        const id = 'produto-id-inexistente';
+        mockProdutoRepository.findById.mockResolvedValue(null as unknown as Produto);
+
+        await expect(produtoUseCase.obterProdutoPorId(id)).rejects.toThrow(new ErroNegocio('produto-nao-existe'));
+    });
+
+    it('deve lançar erro ao tentar remover um produto por ID inexistente', async () => {
+        const idInexistente = 'id-inexistente';
+        mockProdutoRepository.remove.mockImplementation(() => {
+            throw new ErroNegocio('produto-nao-existe');
+        });
+
+        await expect(produtoUseCase.removerProdutoPorId(idInexistente)).rejects.toThrow(new ErroNegocio('produto-nao-existe'));
+    });
+
+    it('deve lançar erro ao tentar obter produtos por categoria inexistente', async () => {
+        const categoriaIdInexistente = 'categoria-inexistente';
+        mockCategoriaRepository.findById.mockResolvedValue(null as unknown as Categoria);
+
+        await expect(produtoUseCase.obterProdutosPorCategoria(categoriaIdInexistente)).rejects.toThrow(new ErroNegocio('produto-categoria-nao-existe'));
     });
 });

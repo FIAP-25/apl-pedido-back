@@ -72,6 +72,12 @@ describe('AxiosClient', () => {
         });
     });
 
+    it('deve retornar undefined para um método HTTP inválido', async () => {
+        const api = 'pagamento';
+        const response = await axiosClient.executarChamada(api, 'invalid' as any, '/caminho', null);
+        expect(response).toBeUndefined();
+    });
+
     afterEach(() => {
         jest.clearAllMocks();
     });

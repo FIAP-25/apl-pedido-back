@@ -1,5 +1,6 @@
 import { IClienteRepository } from '@/domain/contract/repository/cliente.interface';
 import { Cliente } from '@/domain/entity/cliente.model';
+import { ErroNegocio } from '@/domain/exception/erro.module';
 import { AdicionarClienteInput } from '@/infrastructure/dto/cliente/adicionarCliente.dto';
 import { AtualizarClientePorCpfInput } from '@/infrastructure/dto/cliente/atualizarClientePorCpf.dto';
 import { ClienteUseCase } from '@/usecase/cliente/cliente.usecase';
@@ -134,5 +135,77 @@ describe('ClienteUseCase', () => {
 
         expect(mockClienteRepository.find).toHaveBeenCalled();
         expect(resultado.length).toBe(clientesMock.length);
+    });
+
+    it('deve lançar erro ao tentar adicionar um cliente já cadastrado', async () => {
+        const input: AdicionarClienteInput = {
+            cpf: '90088522091',
+            nomeCompleto: 'Nome Cliente',
+            email: 'email@cliente.com'
+        };
+
+        const clienteExistente = new Cliente();
+        clienteExistente.cpf = input.cpf;
+        clienteExistente.nomeCompleto = input.nomeCompleto;
+        clienteExistente.email = input.email;
+
+        mockClienteRepository.findByCPF.mockResolvedValue(clienteExistente);
+
+        await expect(useCase.adicionarCliente(input)).rejects.toThrow(new ErroNegocio('cliente-cpf-cadastrado'));
+    });
+
+    it('deve lançar erro ao tentar remover um cliente não cadastrado', async () => {
+        const cpf = '90088522091';
+
+        mockClienteRepository.findByCPF.mockResolvedValue(null as unknown as Cliente);
+
+        await expect(useCase.removerClientePorCpf(cpf)).rejects.toThrow(new ErroNegocio('cliente-nao-cadastrado'));
+    });
+
+    it('deve lançar erro ao tentar atualizar um cliente não cadastrado', async () => {
+        const input: AtualizarClientePorCpfInput = {
+            cpf: '90088522091',
+            nomeCompleto: 'Nome Atualizado',
+            email: 'novoemail@cliente.com'
+        };
+
+        mockClienteRepository.findByCPF.mockResolvedValue(null as unknown as Cliente);
+
+        await expect(useCase.atualizarClientePorCpf(input)).rejects.toThrow(new ErroNegocio('cliente-nao-cadastrado'));
+    });
+
+    it('deve lançar erro ao tentar obter um cliente por CPF não cadastrado', async () => {
+        const cpf = '90088522091';
+
+        mockClienteRepository.findByCPF.mockResolvedValue(null as unknown as Cliente);
+
+        await expect(useCase.obterClientePorCpf(cpf)).rejects.toThrow(new ErroNegocio('cliente-nao-cadastrado'));
+    });
+
+    it('deve lançar erro ao tentar atualizar um cliente com body vazio', async () => {
+        const input: AtualizarClientePorCpfInput = {
+            cpf: '90088522091',
+            nomeCompleto: '',
+            email: ''
+        };
+
+        const clienteExistente = new Cliente();
+        clienteExistente.cpf = input.cpf ?? '90088522091';
+        clienteExistente.nomeCompleto = 'Nome Cliente';
+        clienteExistente.email = 'email@cliente.com';
+
+        mockClienteRepository.findByCPF.mockResolvedValue(clienteExistente);
+
+        await expect(useCase.atualizarClientePorCpf(input)).rejects.toThrow(new ErroNegocio('body-vazio'));
+    });
+
+    it('deve lançar erro ao tentar adicionar um cliente com CPF inválido', async () => {
+        const input: AdicionarClienteInput = {
+            cpf: 'cpf-invalido',
+            nomeCompleto: 'Nome Cliente',
+            email: 'email@cliente.com'
+        };
+
+        await expect(useCase.adicionarCliente(input)).rejects.toThrow(new ErroNegocio('cliente-cpf-invalido'));
     });
 });
