@@ -24,6 +24,12 @@ export class CategoriaUseCase implements ICategoriaUseCase {
     }
 
     async removerCategoriaPorId(id: string): Promise<void> {
+        const categoriaExiste = await this.categoriaRepository.findById(id);
+
+        if (!categoriaExiste) {
+            throw new ErroNegocio('categoria-nao-cadastrada');
+        }
+
         await this.categoriaRepository.remove(id);
     }
 
