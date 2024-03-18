@@ -10,9 +10,9 @@ export class PedidoProdutoEntity {
     @Column()
     quantidade: number;
 
-    @ManyToOne(() => PedidoEntity, (pedido) => pedido.pedidoProdutos)
+    @ManyToOne(() => PedidoEntity, (pedido) => pedido.pedidoProdutos, { onDelete: 'CASCADE' })
     pedido: PedidoEntity;
 
-    @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidoProdutos)
+    @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidoProdutos, { onDelete: 'CASCADE' })
     produto: ProdutoEntity;
 }

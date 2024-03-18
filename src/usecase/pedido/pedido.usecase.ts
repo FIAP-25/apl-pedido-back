@@ -204,4 +204,10 @@ export class PedidoUseCase implements IPedidoUseCase {
                 console.log('erro: ', erro);
             });
     }
+
+    async enviarEmailCancelamentoPedido(pedidoId: string, email: string): Promise<void> {
+        console.log(`Email enviado para: ${email}`);
+        console.log(`Pedido ${pedidoId} cancelado`);
+        console.log(`o Pedido ${pedidoId} foi cancelado, por favor realize um novo pedido.`);
+    }
 }
