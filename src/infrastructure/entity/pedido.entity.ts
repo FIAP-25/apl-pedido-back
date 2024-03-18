@@ -28,7 +28,9 @@ export class PedidoEntity {
     })
     status: PedidoStatusEntity;
 
-    @ManyToOne(() => ClienteEntity, (cliente) => cliente.pedidos)
+    @ManyToOne(() => ClienteEntity, (cliente) => cliente.pedidos, {
+        eager: true
+    })
     cliente: ClienteEntity;
 
     @OneToMany(() => PedidoProdutoEntity, (pedidoProduto) => pedidoProduto.pedido)
