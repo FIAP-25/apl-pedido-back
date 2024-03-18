@@ -1,0 +1,750 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/clientes": {
+      "post": {
+        "operationId": "ClienteController_adicionarCliente",
+        "summary": "Adiciona um cliente",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdicionarClienteInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Clientes"
+        ]
+      },
+      "get": {
+        "operationId": "ClienteController_obterClientes",
+        "summary": "Obtém a lista de clientes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Clientes"
+        ]
+      }
+    },
+    "/api/clientes/{cpf}": {
+      "delete": {
+        "operationId": "ClienteController_removerClientePorCPF",
+        "summary": "Remove um cliente pelo cpf",
+        "parameters": [
+          {
+            "name": "cpf",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Clientes"
+        ]
+      },
+      "put": {
+        "operationId": "ClienteController_atualizarClientePorCPF",
+        "summary": "Atualiza um cliente pelo CPF",
+        "parameters": [
+          {
+            "name": "cpf",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarClientePorCpfInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Clientes"
+        ]
+      },
+      "get": {
+        "operationId": "ClienteController_obterClientePorCPF",
+        "summary": "Obtém um cliente pelo cpf",
+        "parameters": [
+          {
+            "name": "cpf",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Clientes"
+        ]
+      }
+    },
+    "/api/categorias": {
+      "post": {
+        "operationId": "CategoriaController_adicionarCategoria",
+        "summary": "Adiciona uma categoria",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdicionarCategoriaInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categorias"
+        ]
+      },
+      "get": {
+        "operationId": "CategoriaController_obterCategorias",
+        "summary": "Obtém a lista de categorias",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categorias"
+        ]
+      }
+    },
+    "/api/categorias/{id}": {
+      "delete": {
+        "operationId": "CategoriaController_removerCategoriaPorId",
+        "summary": "Remove uma categoria pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categorias"
+        ]
+      },
+      "put": {
+        "operationId": "CategoriaController_atualizarCategoriaPorId",
+        "summary": "Atualiza uma categoria pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarCategoriaPorIdInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categorias"
+        ]
+      },
+      "get": {
+        "operationId": "CategoriaController_obterCategoriaPorId",
+        "summary": "Obtém uma categoria pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categorias"
+        ]
+      }
+    },
+    "/api/produtos": {
+      "post": {
+        "operationId": "ProdutoController_adicionarProduto",
+        "summary": "Adiciona um produto",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdicionarProdutoInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "get": {
+        "operationId": "ProdutoController_obterProdutos",
+        "summary": "Obtém a lista de produtos",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      }
+    },
+    "/api/produtos/{id}": {
+      "delete": {
+        "operationId": "ProdutoController_removerProdutoPorId",
+        "summary": "Remove um produto pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "put": {
+        "operationId": "ProdutoController_atualizarProdutoPorId",
+        "summary": "Atualiza um produto pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarProdutoPorIdInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "get": {
+        "operationId": "ProdutoController_obterProdutoPorId",
+        "summary": "Obtém um produto pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      }
+    },
+    "/api/produtos/categorias/{categoriaId}": {
+      "get": {
+        "operationId": "ProdutoController_obterProdutosPorCategoria",
+        "summary": "Obtém a lista de produtos pela categoriaId",
+        "parameters": [
+          {
+            "name": "categoriaId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Produtos"
+        ]
+      }
+    },
+    "/api/pedidos": {
+      "post": {
+        "operationId": "PedidoController_adicionarPedido",
+        "summary": "Adiciona um pedido.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdicionarPedidoInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      },
+      "get": {
+        "operationId": "PedidoController_obterPedidos",
+        "summary": "Obtem pedidos",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/api/pedidos/{id}": {
+      "delete": {
+        "operationId": "PedidoController_removerPedidoPorId",
+        "summary": "Remove um pedido pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      },
+      "get": {
+        "operationId": "PedidoController_obterPedidoPorId",
+        "summary": "Obter pedido pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/api/pedidos/status/{id}": {
+      "patch": {
+        "operationId": "PedidoController_atualizarPedidoStatusPorId",
+        "summary": "Atualiza o status do pedido pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarStatusPedidoInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/api/pedidos/webhook": {
+      "patch": {
+        "operationId": "PedidoController_webhookConfirmacaoPedido",
+        "summary": "Webhook de confirmação do pedido",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/webhookPedido"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/api/pedidos/fila": {
+      "get": {
+        "operationId": "PedidoController_obterPedidosFila",
+        "summary": "Obtem fila de pedidos",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_health",
+        "summary": "Obtém a saúde do sistema",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "operationId": "BaseController_redirectToSwagger",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "FIAP - 25 API",
+    "description": "Documentação API.",
+    "version": "2.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desenvolvimento"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "AdicionarClienteInput": {
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "nomeCompleto": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cpf",
+          "nomeCompleto"
+        ]
+      },
+      "AtualizarClientePorCpfInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "nomeCompleto": {
+            "type": "string"
+          }
+        }
+      },
+      "AdicionarCategoriaInput": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "descricao"
+        ]
+      },
+      "AtualizarCategoriaPorIdInput": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "descricao"
+        ]
+      },
+      "AdicionarProdutoInput": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "categoriaId": {
+            "type": "string"
+          },
+          "preco": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "descricao",
+          "nome",
+          "categoriaId",
+          "preco"
+        ]
+      },
+      "AtualizarProdutoPorIdInput": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "categoriaId": {
+            "type": "string"
+          },
+          "preco": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "nome",
+          "descricao",
+          "categoriaId",
+          "preco"
+        ]
+      },
+      "PedidoProduto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "quantidade": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "quantidade"
+        ]
+      },
+      "AdicionarPedidoInput": {
+        "type": "object",
+        "properties": {
+          "clienteCPF": {
+            "type": "string"
+          },
+          "pedidoProdutos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PedidoProduto"
+            }
+          }
+        },
+        "required": [
+          "clienteCPF",
+          "pedidoProdutos"
+        ]
+      },
+      "AtualizarStatusPedidoInput": {
+        "type": "object",
+        "properties": {
+          "statusTag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusTag"
+        ]
+      },
+      "webhookPedido": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "aprovado": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "aprovado",
+          "motivo"
+        ]
+      }
+    }
+  }
+}
