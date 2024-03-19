@@ -13,11 +13,14 @@ import { AdicionarPedidoInput, AdicionarPedidoOutput } from '@/infrastructure/dt
 import { AtualizarStatusPedidoInput, AtualizarStatusPedidoOutput } from '@/infrastructure/dto/pedido/atualizarPedido.dto';
 import { ObterPedidoPorIdOutput } from '@/infrastructure/dto/pedido/obterPedidoPorId.dto';
 import { webhookPedido } from '@/infrastructure/dto/pedido/webhookPedido.dto';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { ClientProxy, MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 @Injectable()
 export class PedidoUseCase implements IPedidoUseCase {
     constructor(
+        @Inject('PAYMENT_SERVICE') private readonly client: ClientProxy,
         private clienteRepository: IClienteRepository,
         private pedidoRepository: IPedidoRepository,
         private pedidoStatusRepository: IPedidoStatusRepository,
@@ -106,7 +109,7 @@ export class PedidoUseCase implements IPedidoUseCase {
             };
         });
 
-        await this.enviarPagamento(pedidoAdicionado.id);
+        this.client.emit('payment_created', pedidoAdicionado);
 
         return mapper.map(pedidoAdicionado, Pedido, AdicionarPedidoOutput);
     }
@@ -159,7 +162,9 @@ export class PedidoUseCase implements IPedidoUseCase {
         pedidoEncontrado.pagamentoStatus = body.aprovado ? 'pedido_aprovado' : 'pedido_nao_aprovado';
         const pedidoAtualizado = await this.pedidoRepository.save(pedidoEncontrado);
 
-        await this.enviarProducao(pedidoAtualizado.id);
+        if (body.aprovado) await this.enviarProducao(pedidoAtualizado.id);
+
+        this.client.emit('notify_payment', pedidoAtualizado);
 
         return pedidoAtualizado;
     }

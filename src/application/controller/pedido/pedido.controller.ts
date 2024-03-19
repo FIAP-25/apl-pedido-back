@@ -4,14 +4,16 @@ import { IPedidoUseCase } from '@/domain/contract/usecase/pedido.interface';
 import { AdicionarPedidoInput } from '@/infrastructure/dto/pedido/adicionarPedido.dto';
 import { AtualizarStatusPedidoInput } from '@/infrastructure/dto/pedido/atualizarPedido.dto';
 import { webhookPedido } from '@/infrastructure/dto/pedido/webhookPedido.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Res } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { ClientProxy, MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 @ApiTags('Pedidos')
 @Controller('api/pedidos')
 export class PedidoController {
-    constructor(private pedidoUseCase: IPedidoUseCase) {}
+    constructor(private pedidoUseCase: IPedidoUseCase, @Inject('PAYMENT_SERVICE') private readonly client: ClientProxy) {}
 
     @Post()
     @ApiOperation({ summary: 'Adiciona um pedido.' })
@@ -20,6 +22,12 @@ export class PedidoController {
         const pedidoAdicionado = await this.pedidoUseCase.adicionarPedido(pedido);
 
         return customResponseSuccess(pedidoAdicionado.id, res);
+    }
+
+    @Post('rabbit')
+    async teste(@Body() body: AdicionarPedidoInput): Promise<any> {
+        console.log('oi');
+        this.client.emit('payment_created', body);
     }
 
     @Delete(':id')
